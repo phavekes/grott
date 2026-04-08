@@ -1,29 +1,23 @@
-FROM python:3.11-slim
+FROM python:3.12-slim
 
 ENV LANG en_US.UTF-8
 ENV LC_ALL en_US.UTF-8
 
 # Run updates
-RUN apt-get clean && apt-get update && apt-get upgrade -y
-
-# Set the locale
-RUN apt-get install -y locales && locale-gen en_US.UTF-8
+RUN apt-get clean && apt-get update && apt-get upgrade -y && apt-get install -y locales && locale-gen en_US.UTF-8
 
 #Install required python packages 
-RUN pip install paho-mqtt
-RUN pip install requests
-RUN pip install influxdb
-RUN pip install influxdb-client
+RUN pip install --no-cache-dir \
+    psutil \
+    paho-mqtt \
+    requests \
+    influxdb \
+    influxdb-client
 
-COPY grott.py /app/grott.py
-COPY grottconf.py /app/grottconf.py
-COPY grottdata.py /app/grottdata.py
-COPY grottproxy.py /app/grottproxy.py
-COPY grottsniffer.py /app/grottsniffer.py
-COPY grottserver.py /app/grottserver.py
-COPY examples/grott.ini /app/grott.ini
-COPY examples/Extensions/grottext.py /app/grottext.py
-COPY examples/Extensions/grotcsv.py /app/grotcsv.py
+COPY grott.py grottconf.py grottdata.py grottproxy.py \
+     grottsniffer.py grottserver.py examples/grott.ini \
+     examples/Extensions/grottext.py examples/Extensions/grotcsv.py \
+     /app/
 
 WORKDIR /app
 CMD ["python", "-u", "grott.py", "-v"]
