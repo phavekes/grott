@@ -249,10 +249,18 @@ class GrottHttpRequestHandler(http.server.BaseHTTPRequestHandler):
                     f.close()
                     return
                 except IOError:
-                    responsetxt = b"<h2>Welcome to Grott the growatt inverter monitor: " + str.encode(vrmserver) + b"</h2><br><h3>Made by Ledidobe, Johan Meijer</h3>"
+                    responsetxt = b"""<h2>Welcome to Grott the growatt inverter monitor: """ + str.encode(vrmserver) + b"""</h2>
+                    <h3>Made by Ledidobe, Johan Meijer</h3>
+                    <h3>Supported paths:</h3>
+                    <ul>
+                        <li><a href="/info">Server Info</a> - View server status and connection information</li>
+                        <li><a href="/datalogger">Datalogger</a> - Datalogger operations and registry</li>
+                        <li><a href="/inverter">Inverter</a> - Inverter operations and registry</li>
+                        <li><a href="/help">Help</a> - Help documentation</li>
+                    </ul>"""
                     responserc = 200
                     responseheader = "text/html"
-                    htmlsendresp(self,responserc,responseheader,responsetxt)
+                    htmlsendresp(self, responserc, responseheader, responsetxt)
                     return
 
             elif self.path.startswith("info"):
